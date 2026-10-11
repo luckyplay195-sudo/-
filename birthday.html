@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Рождения, Солнышко! ✨</title>
+    <!-- Подключаем шрифты Google Fonts -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Pattaya&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-creamy: #FFFDF9;
+            --pink-marshmallow: #FFB7B2;
+            --pink-soft: #FFE5E5;
+            --text-dark: #4A4A4A;
+            --text-muted: #7D7D7D;
+            --white: #FFFFFF;
+            --shadow: rgba(255, 183, 178, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-creamy);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- ЗАДНИЙ ФОН: ЛЕТАЮЩИЕ КОТЯТА И ЦВЕТОЧКИ --- */
+        #animation-container {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1; pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.7;
+            animation: floatUp linear infinite;
+            filter: drop-shadow(0 0 2px var(--pink-marshmallow));
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% {
+                transform: translateY(-10vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- СТИЛИ КАРТОЧЕК --- */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 1px solid var(--pink-soft);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Pattaya', sans-serif;
+            font-size: 2.3rem;
+            color: var(--pink-marshmallow);
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .love-letter { text-align: left; padding: 30px 25px; }
+        .love-letter p { font-size: 0.95rem; margin-bottom: 15px; }
+        .love-letter p:last-child {
+            margin-bottom: 0; text-align: center;
+            font-weight: 600; color: var(--pink-marshmallow);
+        }
+
+        .timer-card h3 {
+            font-size: 1rem; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-muted);
+            margin-bottom: 20px; font-weight: 500;
+        }
+
+        .timer-display { display: flex; justify-content: center; gap: 10px; }
+        .timer-segment { background: var(--pink-soft); padding: 12px 8px; border-radius: 14px; min-width: 70px; }
+        .timer-num { font-size: 1.6rem; font-weight: 600; color: var(--text-dark); display: block; }
+        .timer-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; display: block; }
+
+        @media (max-width: 480px) { .hero h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- Контейнер для летающих котят и цветочков -->
+    <div id="animation-container"></div>
+
+    <div class="container">
+        <header class="card hero">
+            <h1>С днём рождения, солнышко! ✨</h1>
+            <p>Пусть этот праздник длится как можно дольше, а хорошее настроение не заканчивается!</p>
+        </header>
+
+        <main class="card love-letter">
+            <p>Ты — самое лучшее, что со мной случилось. Очень хочется, чтобы этот день принес тебе много улыбок и тепла.</p>
+            <p>Для тебя едет один особенный и очень классный подарок, который мы приготовили вместе с мамой, бабушкой и дедушкой. Он уже преодолевает километры пути, летит через границы и очень спешит к тебе!</p>
+            <p>Ожидание точно того стоит, а пока этот таймер тикает, пусть каждый день напоминает тебе о том, как сильно мы все тебя любим!</p>
+            <p>С праздником! ❤️</p>
+        </main>
+
+        <section class="card timer-card">
+            <h3>До распаковки подарка осталось:</h3>
+            <div class="timer-display">
+                <div class="timer-segment"><span class="timer-num" id="days">00</span><span class="timer-label">Дней</span></div>
+                <div class="timer-segment"><span class="timer-num" id="hours">00</span><span class="timer-label">Часов</span></div>
+                <div class="timer-segment"><span class="timer-num" id="minutes">00</span><span class="timer-label">Минут</span></div>
+                <div class="timer-segment"><span class="timer-num" id="seconds">00</span><span class="timer-label">Секунд</span></div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ТАЙМЕР НА 2 НОЯБРЯ 2026 ГОДА
+        function updateTimer() {
+            const now = new Date();
+            const targetDate = new Date(2026, 10, 2, 0, 0, 0);
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.querySelector('.timer-display').innerHTML = "<h2 style='color: var(--pink-marshmallow); font-family: Pattaya;'>Время пришло! 🎉</h2>";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // ГЕНЕРАЦИЯ КОТЯТ И ЦВЕТОЧКОВ С РОЗОВЫМ КОНТУРОМ
+        // Используем милые SVG-иконки прямо в коде, чтобы они работали без интернета
+        const elementsPool = [
+            // Котик 1
+            `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFB7B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c.67 0 1.35.09 2 .26 1.78-1.54 3.11-1.21 3.11-1.21a4.28 4.28 0 0 1 1 2.33c.5.55.89 1.22 1.15 1.96.31.9.46 1.84.44 2.78 0 5.22-3.4 6.31-7.3 6.31h-1.4C7.1 17.43 3.7 16.31 3.7 11.1c-.02-.94.13-1.88.44-2.78.26-.74.65-1.41 1.15-1.96a4.28 4.28 0 0 1 1-2.33s1.33-.33 3.11 1.21c.65-.17 1.33-.26 2-.26Z"/><path d="M9 11v.01M15 11v.01M10 14s1 .5 2 .5 2-.5 2-.5"/></svg>`,
+            // Котик 2
+            `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFB7B2" stroke-width="2"><circle cx="12" cy="13" r="7"/><path d="M5 9 2 4l5 2M19 9l3-5-5 2"/></svg>`,
+            // Цветочек 1
+            `<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#FFB7B2" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2a4 4 0 0 0-4 4 4 4 0 0 0 4-4Zm0 16a4 4 0 0 0 4 4 4 4 0 0 0-4-4Zm-6-6a4 4 0 0 0-4 4 4 4 0 0 0 4-4Zm12 0a4 4 0 0 0 4-4 4 4 0 0 0-4 4Z"/></svg>`,
+            // Цветочек 2
+            `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB7B2" stroke-width="2"><path d="M12 3v18M3 12h18M5 5l14 14M5 14l14-14"/></svg>`
+        ];
+
+        function createFloatingElement() {
+            const container = document.getElementById('animation-container');
+            if(!container) return;
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'floating-element';
+            
+            // Выбираем случайного котика или цветочек
+            wrapper.innerHTML = elementsPool[Math.floor(Math.random() * elementsPool.length)];
+            
+            // Задаем случайные параметры
+            wrapper.style.left = Math.random() * 90 + 'vw';
+            
+            const duration = Math.random() * 5 + 6; // Скорость подъема (от 6 до 11 секунд)
+            wrapper.style.animationDuration = duration + 's';
+            
+            container.appendChild(wrapper);
+            
+            // Удаляем, когда улетит за экран
+            setTimeout(() => { wrapper.remove(); }, duration * 1000);
+        }
+
+        // Создаем элементы каждые 700мс
+        setInterval(createFloatingElement, 700);
+    </script>
+</body>
+</html>
